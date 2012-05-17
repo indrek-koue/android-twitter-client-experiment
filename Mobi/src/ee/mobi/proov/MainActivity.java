@@ -3,29 +3,38 @@ package ee.mobi.proov;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.mobi.proov.util.Auth;
+
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
 import android.app.Activity;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+
+	Twitter twitter;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+		twitter = new TwitterFactory().getInstance();
+		AccessToken accessToken = Auth.loadAccessToken(this,
+				LoginActivity.useId);
+		twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
+				LoginActivity.CONSUMER_SECRET_KEY);
+		twitter.setOAuthAccessToken(accessToken);
 
 		initTweetButton();
 		getTimelineAndInit();
@@ -48,8 +57,7 @@ public class MainActivity extends Activity {
 
 						if (!msg.equals("")) {
 							try {
-								Twitter twitter = new TwitterFactory()
-										.getInstance();
+
 								Status status = twitter.updateStatus(msg);
 								Toast.makeText(
 										getBaseContext(),
@@ -87,7 +95,7 @@ public class MainActivity extends Activity {
 		try {
 
 			// get timeline data from twitter
-			Twitter twitter = new TwitterFactory().getInstance();
+
 			List<Status> statuses = twitter.getHomeTimeline();
 
 			// copy messages to string list

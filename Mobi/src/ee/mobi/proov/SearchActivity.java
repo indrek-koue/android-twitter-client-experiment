@@ -35,28 +35,30 @@ public class SearchActivity extends Activity {
 	private void initCancleButton() {
 		((Button) findViewById(R.id.button1))
 				.setOnClickListener(new View.OnClickListener() {
-
 					public void onClick(View v) {
 						finish();
 					}
 				});
 	}
 
+	/**
+	 * Search button functionality
+	 */
 	private void initSearchButton() {
 		((Button) findViewById(R.id.button2))
 				.setOnClickListener(new View.OnClickListener() {
 
 					public void onClick(View v) {
+						
 						String msg = ((EditText) findViewById(R.id.editText1))
 								.getText().toString();
 
-						// The factory instance is re-useable and thread safe.
-						Twitter twitter = new TwitterFactory().getInstance();
+						// Twitter twitter = new TwitterFactory().getInstance();
 						Query query = new Query(msg);
 
-						
 						try {
-							QueryResult result = twitter.search(query);
+							QueryResult result = MainActivity.twitter
+									.search(query);
 
 							// copy messages to string list
 							List<String> msgs = new ArrayList<String>();

@@ -15,16 +15,16 @@
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
         android:ems="10"
-        android:hint="Message"
-        android:text="Hello world tweet" >
+        android:hint="Enter tweet here" >
 
         <requestFocus />
     </EditText>
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tweet" />
 
@@ -32,6 +32,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
         android:text="My timeline from Twitter" />
 
     <ListView

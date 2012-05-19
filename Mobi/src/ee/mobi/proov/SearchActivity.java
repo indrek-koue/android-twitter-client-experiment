@@ -3,6 +3,8 @@ package ee.mobi.proov;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.mobi.proov.async.SearchAsync;
+
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -19,6 +21,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Search activity
+ * 
+ * @author Indrek Kõue
+ * 
+ */
 public class SearchActivity extends Activity {
 
 	/** Called when the activity is first created. */
@@ -49,35 +57,11 @@ public class SearchActivity extends Activity {
 				.setOnClickListener(new View.OnClickListener() {
 
 					public void onClick(View v) {
-						
+
 						String msg = ((EditText) findViewById(R.id.editText1))
 								.getText().toString();
 
-						// Twitter twitter = new TwitterFactory().getInstance();
-						Query query = new Query(msg);
-
-						try {
-							QueryResult result = MainActivity.twitter
-									.search(query);
-
-							// copy messages to string list
-							List<String> msgs = new ArrayList<String>();
-							for (Tweet tweet : result.getTweets())
-								msgs.add(tweet.getFromUser() + ":"
-										+ tweet.getText());
-
-							// find listview and add string list to it
-							ListView lv = ((ListView) findViewById(R.id.listView1));
-							lv.setAdapter(new ArrayAdapter<String>(
-									SearchActivity.this,
-									android.R.layout.simple_list_item_1, msgs));
-
-						} catch (TwitterException e) {
-							Toast.makeText(getBaseContext(),
-									"Error: " + e.toString(), Toast.LENGTH_LONG)
-									.show();
-							e.printStackTrace();
-						}
+						new SearchAsync(SearchActivity.this).execute(msg);
 
 					}
 				});

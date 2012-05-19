@@ -19,25 +19,16 @@ import ee.mobi.proov.async.AuthenticateAsync;
 import ee.mobi.proov.util.Auth;
 
 /**
- * @author Indrek Kõue 17.05.2012
+ * First activity on app start (authentication)
  * 
- *         Authentication activity
+ * @author Indrek Kõue
  * 
- *         NB! I am handling confinguration changes my self (manifest >>
- *         activity >> android:configChanges="orientation" . Reason: cleaner
- *         code but removes the feature to have different styles for different
- *         configurations (portrait/land)
  */
 
 public class MainActivity extends Activity {
 
-	// public static long useId;
 	public static final String CONSUMER_KEY = "yq8oFFmJ9NKG1BK7n2x7g";
 	public static final String CONSUMER_SECRET_KEY = "NzdWHp5b1eLF6i9m8oitYzecQrGWx0vp0SsvsDdQQ";
-	// public static final String ACCESS_TOKEN =
-	// "582704981-BRu4uemtTW5DXQWoM9kPM9rTsQtckWDwA8HiijCO";
-	// public static final String ACCESS_TOKEN_SECRET =
-	// "G7f4CjfI82ybi1Mmnq73ex7dcTf3xF6n2EQjdjcU";
 
 	public static Twitter twitter;
 
@@ -111,31 +102,6 @@ public class MainActivity extends Activity {
 								.getText().toString();
 
 						new AuthenticateAsync(MainActivity.this).execute(pin);
-						// AccessToken accessToken = null;
-						// while (accessToken == null) {
-						// try {
-						// accessToken = twitter.getOAuthAccessToken(pin);
-						// } catch (TwitterException e) {
-						// if (401 == e.getStatusCode())
-						// Log.e("MY",
-						// "Unable to get the access token."
-						// + e.toString());
-						// e.printStackTrace();
-						// }
-						//
-						// }
-						//
-						// Log.d("MY", "TOKEN RECEIVED: " +
-						// accessToken.getToken()
-						// + ":" + accessToken.getTokenSecret());
-						// twitter.setOAuthAccessToken(accessToken);
-						//
-						// // save token
-						// Auth.storeAccessToken(MainActivity.this,
-						// accessToken.getUserId(), accessToken);
-						//
-						// startActivity(new Intent(MainActivity.this,
-						// FrontPageActivity.class));
 
 					}
 				});

@@ -1,3 +1,15 @@
+########### NOTES FROM DEV (INDREK KÕUE @ 19.05.2012) ##############
+
+* Android ICS THEME
+* All long loading assignments are handled asyncronously
+* configuration changes are handled by me (cleaner code)
+* oAuth authentication
+* insert tweets, view timeline, search functionality 
+* string are hardcoded
+* no emphasis on UI usability (not part of the assignment)
+
+
+######### ASSIGNEMENT #############
 Description:
 A Twitter client application for a mobile device. 
 

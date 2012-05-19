@@ -3,6 +3,9 @@ package ee.mobi.proov;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.mobi.proov.async.TimelineAsync;
+import ee.mobi.proov.async.TweetAsync;
+
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -17,9 +20,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FrontPageActivity extends Activity {
+/**
+ * User home activity
+ * 
+ * @author Indrek Kõue
+ * 
+ */
 
-	// Twitter twitter;
+public class FrontPageActivity extends Activity {
 
 	/** Called when the activity is first created. */
 	@Override
@@ -27,10 +35,9 @@ public class FrontPageActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		// twitter = LoginActivity.twitter;
+		new TimelineAsync(this).execute();
 
-		initTweetButton();
-		getTimelineAndInit();
+		bindTweetButton();
 		bindSearchButton();
 
 	}
@@ -52,7 +59,7 @@ public class FrontPageActivity extends Activity {
 	/**
 	 * Functionality to tweet button
 	 */
-	private void initTweetButton() {
+	private void bindTweetButton() {
 
 		((Button) findViewById(R.id.button1))
 				.setOnClickListener(new View.OnClickListener() {
@@ -64,31 +71,7 @@ public class FrontPageActivity extends Activity {
 								.getText().toString();
 
 						if (!msg.equals("")) {
-							try {
-
-								Status status = MainActivity.twitter
-										.updateStatus(msg);
-								Toast.makeText(
-										getBaseContext(),
-										"Status updated to: "
-												+ status.getText() + "",
-										Toast.LENGTH_LONG).show();
-
-								// refresh timeline data - restart activity
-								finish();
-								startActivity(new Intent(
-										FrontPageActivity.this,
-										FrontPageActivity.class));
-								// getTimelineAndInit();
-
-							} catch (TwitterException e) {
-								Toast.makeText(getBaseContext(),
-										"Error: " + e.toString(),
-										Toast.LENGTH_LONG).show();
-
-								Log.e("MY", e.toString());
-								e.printStackTrace();
-							}
+							new TweetAsync(FrontPageActivity.this).execute(msg);
 						} else {
 							Toast.makeText(getBaseContext(),
 									"Empty tweet not allowed",
@@ -97,37 +80,6 @@ public class FrontPageActivity extends Activity {
 						}
 					}
 				});
-
-	}
-
-	/**
-	 * Get timeline data from twitter and fills listview with it
-	 * 
-	 * @throws TwitterException
-	 */
-	private void getTimelineAndInit() {
-
-		try {
-
-			// get timeline data from twitter
-			List<Status> statuses = MainActivity.twitter.getHomeTimeline();
-
-			// copy messages to string list
-			List<String> msgs = new ArrayList<String>();
-			for (Status status : statuses)
-				msgs.add(status.getText());
-
-			// find listview and add string list to it
-			ListView lv = ((ListView) findViewById(R.id.listView1));
-			lv.setAdapter(new ArrayAdapter<String>(this,
-					android.R.layout.simple_list_item_1, msgs));
-
-		} catch (TwitterException e) {
-			Toast.makeText(getBaseContext(),
-					"Get timeline error: " + e.toString(), Toast.LENGTH_LONG)
-					.show();
-			e.printStackTrace();
-		}
 
 	}
 

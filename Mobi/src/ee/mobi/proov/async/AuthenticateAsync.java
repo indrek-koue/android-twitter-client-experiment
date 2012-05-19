@@ -14,11 +14,8 @@ import ee.mobi.proov.util.Auth;
 
 public class AuthenticateAsync extends AsyncTask<String, String, AccessToken> {
 
-	Activity a;
-
-	// Twitter twitter;
-
-	ProgressDialog dialog;
+	private Activity a;
+	private ProgressDialog dialog;
 
 	public AuthenticateAsync(Activity a) {
 		this.a = a;
@@ -38,23 +35,9 @@ public class AuthenticateAsync extends AsyncTask<String, String, AccessToken> {
 
 		Log.i("MY", "async auth start, pin: " + params[0]);
 
-		// AccessToken accessToken = null;
-
-		// ConfigurationBuilder cb = new ConfigurationBuilder();
-		// cb.setDebugEnabled(true)
-		// .setOAuthConsumerKey(LoginActivity.CONSUMER_KEY)
-		// .setOAuthConsumerSecret(LoginActivity.CONSUMER_SECRET_KEY);
-		// TwitterFactory tf = new TwitterFactory(cb.build());
-		//
-		// twitter = tf.getInstance();
-
-		// twitter = new TwitterFactory().getInstance();
-		// twitter.setOAuthConsumer(MainActivity.CONSUMER_KEY,
-		// MainActivity.CONSUMER_SECRET_KEY);
-
 		AccessToken accessToken = null;
-
 		while (accessToken == null) {
+
 			try {
 				accessToken = MainActivity.twitter
 						.getOAuthAccessToken(params[0]);
@@ -64,12 +47,11 @@ public class AuthenticateAsync extends AsyncTask<String, String, AccessToken> {
 							"Unable to get the access token." + e.toString());
 				e.printStackTrace();
 			}
+
 		}
-		// while (accessToken == null)
-		// accessToken = twitter.getOAuthAccessToken(
-		// twitter.getOAuthRequestToken(), params[0]);
 
 		return accessToken;
+
 	}
 
 	@Override
@@ -77,10 +59,9 @@ public class AuthenticateAsync extends AsyncTask<String, String, AccessToken> {
 
 		Auth.storeAccessToken(a, 0, result);
 
-		Log.i("MY", "async auth end");
-
 		dialog.dismiss();
 
+		Log.i("MY", "async auth end");
 		Toast.makeText(a, "Authenticate success", Toast.LENGTH_LONG).show();
 
 		a.startActivity(new Intent(a, FrontPageActivity.class));

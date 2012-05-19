@@ -3,6 +3,7 @@ package ee.mobi.proov;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import ee.mobi.proov.async.Authenticate;
+import ee.mobi.proov.util.Auth;
 
 /**
  * @author Indrek Kõue 17.05.2012
@@ -43,44 +45,80 @@ public class LoginActivity extends Activity {
 		ConfigurationBuilder cb = new ConfigurationBuilder();
 		cb.setDebugEnabled(true).setOAuthConsumerKey(CONSUMER_KEY)
 				.setOAuthConsumerSecret(CONSUMER_SECRET_KEY)
-				.setOAuthAccessToken(ACCESS_TOKEN)
-				.setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+		// .setOAuthAccessToken(ACCESS_TOKEN)
+		// .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET)
+		;
 		TwitterFactory tf = new TwitterFactory(cb.build());
 		twitter = tf.getInstance();
+		//
+		// startActivity(new Intent(this, MainActivity.class));
+		//
+		//
+		try {
+			// Twitter twitter = new TwitterFactory().getInstance();
 
-		startActivity(new Intent(this, MainActivity.class));
-//		
-//		
-//		try {
-//			// Twitter twitter = new TwitterFactory().getInstance();
-//
-//			// twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
-//			// LoginActivity.CONSUMER_SECRET_KEY);
-//			RequestToken requestToken = twitter.getOAuthRequestToken();
-//
-//			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(requestToken
-//					.getAuthorizationURL())));
-//
-//		} catch (TwitterException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		((Button) findViewById(R.id.button1))
-//				.setOnClickListener(new View.OnClickListener() {
-//
-//					public void onClick(View v) {
-//
-//						Log.i("MY", "code entered: "
-//								+ ((EditText) findViewById(R.id.editText1))
-//										.getText().toString()
-//								+ " START ASYNC for accesstoken");
-//
-//						new Authenticate(LoginActivity.this)
-//								.execute(((EditText) findViewById(R.id.editText1))
-//										.getText().toString());
-//
-//					}
-//				});
+			// twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
+			// LoginActivity.CONSUMER_SECRET_KEY);
+
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(twitter
+					.getOAuthRequestToken().getAuthorizationURL())));
+
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		((Button) findViewById(R.id.button1))
+				.setOnClickListener(new View.OnClickListener() {
+
+					public void onClick(View v) {
+
+						String pin = ((EditText) findViewById(R.id.editText1))
+								.getText().toString();
+
+						Log.i("MY", "pin: " + pin
+								+ " START ASYNC for accesstoken");
+
+						// new Authenticate(LoginActivity.this)
+						// .execute(((EditText) findViewById(R.id.editText1))
+						// .getText().toString());
+						AccessToken accessToken = null;
+						while (accessToken == null) {
+							try {
+								// accessToken = twitter.getOAuthAccessToken(
+								// twitter.getOAuthRequestToken(), pin);
+								//
+								accessToken = twitter.getOAuthAccessToken(pin);
+							} catch (TwitterException e) {
+								if (401 == e.getStatusCode())
+									Log.e("MY",
+											"Unable to get the access token."
+													+ e.toString());
+								e.printStackTrace();
+							}
+
+//							try {
+//								Thread.sleep(1000);
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+						}
+
+						Log.d("MY", "TOKEN RECEIVED: " + accessToken.getToken()
+								+ ":" + accessToken.getTokenSecret());
+
+						Auth.storeAccessToken(LoginActivity.this,
+								accessToken.getUserId(), accessToken);
+
+						twitter.setOAuthAccessToken(accessToken);
+
+						startActivity(new Intent(LoginActivity.this,
+								MainActivity.class));
+
+					}
+				});
+
 	}
+
 }

@@ -17,12 +17,6 @@ Functional requirements:
 update
 3) Display user’s home timeline - https://dev.twitter.com/docs/api/1/get/statuses/home_timeline
 4) Search tweets - https://dev.twitter.com/docs/api/1/get/search
-The more is better this time - any other functionality may be added to make the application more 
-usable.
-Please give approximate estimation how much time it would take for you to complete the 
-assignment and by what time you could provide the application with source code. It may be 
-really hard to give correct estimations if you have no experience with the technology, so please 
-feel free to just update us if estimations change while you are developing.
 
 We will evaluate following aspects:
 1) Object oriented approach

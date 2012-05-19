@@ -3,15 +3,13 @@ package ee.mobi.proov;
 import java.util.ArrayList;
 import java.util.List;
 
-import ee.mobi.proov.util.Auth;
-
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,15 +27,26 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		twitter = new TwitterFactory().getInstance();
-		AccessToken accessToken = Auth.loadAccessToken(this,
-				LoginActivity.useId);
-		twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
-				LoginActivity.CONSUMER_SECRET_KEY);
-		twitter.setOAuthAccessToken(accessToken);
+		twitter = LoginActivity.twitter;
+
+		// twitter = new TwitterFactory().getInstance();
+		// AccessToken accessToken = Auth.loadAccessToken(this,
+		// LoginActivity.useId);
+		// twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
+		// LoginActivity.CONSUMER_SECRET_KEY);
+		// twitter.setOAuthAccessToken(accessToken);
 
 		initTweetButton();
 		getTimelineAndInit();
+
+		((Button) findViewById(R.id.button2))
+				.setOnClickListener(new View.OnClickListener() {
+
+					public void onClick(View v) {
+						startActivity(new Intent(MainActivity.this,
+								SearchActivity.class));
+					}
+				});
 
 	}
 
@@ -70,8 +79,10 @@ public class MainActivity extends Activity {
 
 							} catch (TwitterException e) {
 								Toast.makeText(getBaseContext(),
-										"Empty tweet not allowed",
+										"Error: " + e.toString(),
 										Toast.LENGTH_LONG).show();
+
+								Log.e("MY", e.toString());
 								e.printStackTrace();
 							}
 						} else {
@@ -95,7 +106,6 @@ public class MainActivity extends Activity {
 		try {
 
 			// get timeline data from twitter
-
 			List<Status> statuses = twitter.getHomeTimeline();
 
 			// copy messages to string list

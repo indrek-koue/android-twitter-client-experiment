@@ -33,7 +33,7 @@ public class SearchActivity extends Activity {
 	}
 
 	private void initCancleButton() {
-		((Button) findViewById(R.id.button2))
+		((Button) findViewById(R.id.button1))
 				.setOnClickListener(new View.OnClickListener() {
 
 					public void onClick(View v) {
@@ -52,8 +52,9 @@ public class SearchActivity extends Activity {
 
 						// The factory instance is re-useable and thread safe.
 						Twitter twitter = new TwitterFactory().getInstance();
-						Query query = new Query("source:twitter4j " + msg);
+						Query query = new Query(msg);
 
+						
 						try {
 							QueryResult result = twitter.search(query);
 

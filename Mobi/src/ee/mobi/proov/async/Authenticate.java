@@ -8,10 +8,12 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class Authenticate extends AsyncTask<String, String, AccessToken> {
 
@@ -25,7 +27,18 @@ public class Authenticate extends AsyncTask<String, String, AccessToken> {
 	@Override
 	protected AccessToken doInBackground(String... params) {
 
+		Log.i("MY", "async auth start");
+
 		AccessToken accessToken = null;
+
+		// ConfigurationBuilder cb = new ConfigurationBuilder();
+		// cb.setDebugEnabled(true)
+		// .setOAuthConsumerKey(LoginActivity.CONSUMER_KEY)
+		// .setOAuthConsumerSecret(LoginActivity.CONSUMER_SECRET_KEY);
+		// TwitterFactory tf = new TwitterFactory(cb.build());
+		//
+		// twitter = tf.getInstance();
+
 		twitter = new TwitterFactory().getInstance();
 		twitter.setOAuthConsumer(LoginActivity.CONSUMER_KEY,
 				LoginActivity.CONSUMER_SECRET_KEY);
@@ -53,7 +66,9 @@ public class Authenticate extends AsyncTask<String, String, AccessToken> {
 			e.printStackTrace();
 		}
 
-		// a.startActivity(new Intent(a, MainActivity.class));
+		Log.i("MY", "async auth end");
+
+		a.startActivity(new Intent(a, MainActivity.class));
 
 	}
 
